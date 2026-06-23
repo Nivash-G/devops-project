@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>System Status</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #0d0d0d; color: #f0c040; font-family: Arial, sans-serif; padding: 40px; }
+    h1 { font-size: 2rem; margin-bottom: 6px; }
+    .sub { color: #888; font-size: 0.85rem; margin-bottom: 32px; }
+    .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #22c55e; margin-right: 6px; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    .cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; max-width: 600px; margin-bottom: 28px; }
+    .card { background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 10px; padding: 22px; }
+    .card .label { color: #888; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px; }
+    .card .value { font-size: 2.2rem; font-weight: bold; color: #f0c040; }
+    .card .unit { font-size: 0.8rem; color: #555; margin-top: 4px; }
+    .bar-section { max-width: 600px; }
+    .bar-wrap { background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 10px; padding: 16px; margin-bottom: 12px; }
+    .bar-label { display: flex; justify-content: space-between; font-size: 0.82rem; color: #888; margin-bottom: 8px; }
+    .bar-track { background: #2a2a2a; border-radius: 4px; height: 8px; }
+    .bar-fill { height: 8px; border-radius: 4px; background: #f0c040; transition: width 0.8s ease; }
+    .badges { margin-top: 28px; }
+    .badge { display: inline-block; border: 1px solid #f0c040; color: #f0c040; padding: 5px 14px; border-radius: 20px; font-size: 0.8rem; margin-right: 8px; margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+  <h1>System Status Dashboard</h1>
+  <p class="sub"><span class="dot"></span>Live · AWS EC2 · Auto-deployed via Docker + GitHub Actions</p>
+
+  <div class="cards">
+    <div class="card"><div class="label">CPU Usage</div><div class="value" id="cpu">--</div><div class="unit">percent</div></div>
+    <div class="card"><div class="label">Memory Used</div><div class="value" id="mem">--</div><div class="unit">percent</div></div>
+    <div class="card"><div class="label">Uptime</div><div class="value" id="uptime">--</div><div class="unit">hours</div></div>
+    <div class="card"><div class="label">Disk Used</div><div class="value" id="disk">--</div><div class="unit">percent</div></div>
+  </div>
+
+  <div class="bar-section">
+    <div class="bar-wrap">
+      <div class="bar-label"><span>CPU</span><span id="cpu-p">--</span></div>
+      <div class="bar-track"><div class="bar-fill" id="cpu-bar" style="width:0%"></div></div>
+    </div>
+    <div class="bar-wrap">
+      <div class="bar-label"><span>Memory</span><span id="mem-p">--</span></div>
+      <div class="bar-track"><div class="bar-fill" id="mem-bar" style="width:0%"></div></div>
+    </div>
+    <div class="bar-wrap">
+      <div class="bar-label"><span>Disk</span><span id="disk-p">--</span></div>
+      <div class="bar-track"><div class="bar-fill" id="disk-bar" style="width:0%"></div></div>
+    </div>
+  </div>
+
+  <div class="badges">
+    <span class="badge">Python Flask</span>
+    <span class="badge">Docker</span>
+    <span class="badge">GitHub Actions</span>
+    <span class="badge">AWS EC2</span>
+  </div>
+
+  <script>
+    async function update() {
+      try {
+        const r = await fetch("/stats");
+        const d = await r.json();
+        document.getElementById("cpu").textContent = d.cpu;
+        document.getElementById("mem").textContent = d.memory;
+        document.getElementById("uptime").textContent = d.uptime;
+        document.getElementById("disk").textContent = d.disk;
+        document.getElementById("cpu-p").textContent = d.cpu + "%";
+        document.getElementById("mem-p").textContent = d.memory + "%";
+        document.getElementById("disk-p").textContent = d.disk + "%";
+        document.getElementById("cpu-bar").style.width = d.cpu + "%";
+        document.getElementById("mem-bar").style.width = d.memory + "%";
+        document.getElementById("disk-bar").style.width = d.disk + "%";
+      } catch(e) { console.log("Retrying..."); }
+    }
+    update();
+    setInterval(update, 5000);
+  </script>
+</body>
+</html>

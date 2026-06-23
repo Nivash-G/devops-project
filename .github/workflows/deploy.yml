@@ -31,7 +31,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            sudo docker pull YOUR_DOCKERHUB_USERNAME/devops-project:latest
+            sudo docker pull nivas0010/devops-project:latest
             sudo docker stop devops-app || true
             sudo docker rm devops-app || true
-            sudo docker run -d --name devops-app -p 5000:5000 YOUR_DOCKERHUB_USERNAME/devops-project:latest
+            sudo docker run -d --name devops-app -p 5000:5000 nivas0010/devops-project:latest

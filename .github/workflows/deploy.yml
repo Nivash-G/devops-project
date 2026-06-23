@@ -35,3 +35,4 @@ jobs:
             sudo docker stop devops-app || true
             sudo docker rm devops-app || true
             sudo docker run -d --name devops-app -p 5000:5000 nivas0010/devops-project:latest
+

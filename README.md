@@ -15,6 +15,16 @@ Displays real-time server metrics from AWS EC2:
 
 Dashboard auto-refreshes every 5 seconds without page reload.
 
+## Screenshots
+
+### Live Dashboard
+![Dashboard](<img width="1918" height="1013" alt="Screenshot 2026-06-23 135607" src="https://github.com/user-attachments/assets/653f79ab-4554-43ce-b2c6-62dbb9bae51c" />
+)
+
+### CI/CD Pipeline
+![Pipeline](<img width="1919" height="994" alt="Screenshot 2026-06-23 140735" src="https://github.com/user-attachments/assets/3937d68e-b3a9-45b0-83dc-370e92604a6b" />
+)
+
 ## Tech Stack
 | Tool | Purpose |
 |------|---------|
